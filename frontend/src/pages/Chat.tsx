@@ -17,6 +17,7 @@ const Chat = () => {
   const [text, setText] = useState<string>("");
   const sent = "bg-yellow-500 text-gray-900 p-3 ml-auto rounded-lg max-w-xs ";
   const recieved = "bg-gray-700 p-3 rounded-lg max-w-xs";
+
   useEffect(() => {
     if (payloadStr == null) {
       navigate("/");
@@ -29,13 +30,28 @@ const Chat = () => {
     if (!ws?.current) return;
     const socket = ws?.current;
     if (socket)
-      socket.onmessage = (event) => {
-        setMessages((prev) => [
-          ...prev,
-          { type: "recieved", message: event.data },
-        ]);
-        // console.log(event.data)
+      socket.onopen = () => {
+        const payload = localStorage.getItem("payload");
+        if (payload) {
+          const data = JSON.parse(payload);
+          const newData = {
+            type: "re-join",
+            roomId: data.roomId,
+            username: data.username,
+          };
+          setTimeout(() => {
+            socket.send(JSON.stringify(newData));
+          }, 100);
+        }
+        console.log("WebSocket Connected");
       };
+    socket.onmessage = (event) => {
+      setMessages((prev) => [
+        ...prev,
+        { type: "recieved", message: event.data },
+      ]);
+      // console.log(event.data)
+    };
   }, [ws.current]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
