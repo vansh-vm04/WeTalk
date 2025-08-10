@@ -1,11 +1,8 @@
 import { createContext, useEffect, useRef, type ReactNode } from "react"
+import type { WSContextType } from "../types/Chat";
 const env = import.meta.env
 
-interface Type{
-  ws:React.Ref<WebSocket | null>;
-}
-
-export const WSContext = createContext<Type | null>(null);
+export const WSContext = createContext<WSContextType | null>(null);
 
 export const WebSocketProvider = ({children}:{children:ReactNode})=>{
     const wsRef = useRef<WebSocket | null>(null);
