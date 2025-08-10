@@ -57,6 +57,7 @@ const JoinRoom = () => {
           <input
             type="text"
             id="username"
+            maxLength={20}
             className="bg-gray-800 border border-gray-700 placeholder-gray-400 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
             placeholder="John"
             required
@@ -76,6 +77,7 @@ const JoinRoom = () => {
             onChange={(e) => setRoomId(e.target.value.toLocaleUpperCase())}
             type="text"
             id="room"
+            maxLength={10}
             placeholder="JOHN28"
             className="bg-gray-800 border border-gray-700 placeholder-gray-400 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5"
             required
