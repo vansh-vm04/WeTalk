@@ -1,4 +1,4 @@
-import { useContext, useEffect,useState } from "react";
+import { useContext, useEffect,useState, type RefObject } from "react";
 import { useNavigate } from "react-router-dom";
 import { WSContext } from "../context/WebSocketProvider";
 
@@ -10,7 +10,7 @@ const JoinRoom = () => {
   const [message, setMessage] = useState<string>();
   const navigate = useNavigate();
   const context = useContext(WSContext);
-  const ws = context?.ws;
+  const ws:RefObject<WebSocket> = context?.ws;
 
   useEffect(()=>{
     if(!ws.current) return;

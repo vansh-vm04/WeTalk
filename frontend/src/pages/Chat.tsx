@@ -1,19 +1,15 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState, type RefObject } from "react";
 import { WSContext } from "../context/WebSocketProvider";
 import { useNavigate } from "react-router-dom";
-
-interface MsgType {
-  type: "sent" | "recieved";
-  message: string;
-}
+import { type PayloadType, type MsgType } from "../types/Chat";
 
 const Chat = () => {
   const navigate = useNavigate();
   const context = useContext(WSContext);
-  const ws = context?.ws;
-  const payloadStr: string = localStorage.getItem("payload");
+  const ws:RefObject<WebSocket | null> = context?.ws;
+  const payloadStr: string | null = localStorage.getItem("payload");
   const [messages, setMessages] = useState<MsgType[]>([]);
-  const [payload, setPayload] = useState({});
+  const [payload, setPayload] = useState<PayloadType>({username:'',roomId:'',type:'chat'});
   const [text, setText] = useState<string>('');
   const sent = "bg-yellow-500 text-gray-900 p-3 rounded-lg max-w-xs self-end";
   const recieved = "bg-gray-700 p-3 rounded-lg max-w-xs";
@@ -23,7 +19,7 @@ const Chat = () => {
   }, []);
 
   useEffect(()=>{
-    if(!ws.current) return;
+    if(!ws?.current) return;
     ws.current.onmessage = (event) => {
       setMessages((prev)=>[...prev, { type: "recieved", message: event.data }]);
       console.log(event.data)
@@ -38,13 +34,13 @@ useEffect(() => {
 
   const sendMessage = async () => {
     if (!text || text.length == 0) return;
-    let data = {
+    const data = {
       type: "chat",
       message: text,
       username: payload.username,
       roomId: payload.roomId,
     };
-    ws.current.send(JSON.stringify(data));
+    ws?.current?.send(JSON.stringify(data));
     setMessages((prev)=>[...prev, { type: "sent", message: text }]);
     setText('')
   };
