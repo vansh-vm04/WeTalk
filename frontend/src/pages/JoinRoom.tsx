@@ -1,7 +1,6 @@
-import { useContext, useEffect,useState, type RefObject } from "react";
+import { useContext, useEffect, useState, type RefObject } from "react";
 import { useNavigate } from "react-router-dom";
 import { WSContext } from "../context/WebSocketProvider";
-
 
 const JoinRoom = () => {
   const [username, setUsername] = useState("");
@@ -10,37 +9,38 @@ const JoinRoom = () => {
   const [message, setMessage] = useState<string>();
   const navigate = useNavigate();
   const context = useContext(WSContext);
-  const ws:RefObject<WebSocket> = context?.ws;
+  const ws: RefObject<WebSocket> = context?.ws;
 
-  useEffect(()=>{
-    if(!ws.current) return;
-    ws.current.onmessage = (event)=>{
-      setMessage(event.data)
+  useEffect(() => {
+    if (!ws.current) return;
+    const socket = ws.current;
+    socket.onmessage = (event) => {
+      setMessage(event.data);
+    };
+  }, [ws.current]);
+
+  useEffect(() => {
+    if (message?.startsWith("Joined")) {
+      navigate("/chat");
     }
-  },[ws.current])
+  }, [message]);
 
-  useEffect(()=>{
-    if(message?.startsWith('Joined')){
-      navigate('/chat')
-    }
-  },[message])
-
-  const talk = async (e:React.FormEvent<HTMLFormElement>) => {
+  const talk = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const payload = {
       username: username,
       type: type,
       roomId: roomId,
     };
-    const payloadStr = JSON.stringify(payload)
-    localStorage.setItem('payload',payloadStr)
+    const payloadStr = JSON.stringify(payload);
+    localStorage.setItem("payload", payloadStr);
     ws.current.send(payloadStr);
   };
 
   return (
     <div className="flex w-screen h-screen items-center justify-center text-white">
       <form
-        onSubmit={(e)=>talk(e)}
+        onSubmit={(e) => talk(e)}
         className="bg-gray-900 max-w-[360px] min-w-[300px] rounded-2xl p-8 flex flex-col gap-6 items-center shadow-2xl border border-yellow-600"
       >
         <span className="text-4xl font-bold tracking-wide text-yellow-500">
