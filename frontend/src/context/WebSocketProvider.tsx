@@ -10,22 +10,7 @@ export const WebSocketProvider = ({children}:{children:ReactNode})=>{
     useEffect(() => {
     const ws = new WebSocket(`${env.VITE_SOCKET_URL}`);
     wsRef.current = ws;
-    ws.onopen = () => {
-      const payload = localStorage.getItem('payload');
-      if(payload){
-        const data = JSON.parse(payload);
-        const newData = {
-          type:'re-join',
-          roomId:data.roomId,
-          username:data.username
-        }
-        setTimeout(() => {
-          ws.send(JSON.stringify(newData));
-        }, 100);
-      }
-      console.log("WebSocket Connected");
-    };
-
+    
     ws.onerror = (err) => {
       console.error("WebSocket Error:", err);
     };
