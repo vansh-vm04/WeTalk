@@ -19,7 +19,9 @@ export const WebSocketProvider = ({children}:{children:ReactNode})=>{
           roomId:data.roomId,
           username:data.username
         }
-        ws.send(JSON.stringify(newData));
+        setTimeout(() => {
+          ws.send(JSON.stringify(newData));
+        }, 100);
       }
       console.log("WebSocket Connected");
     };
