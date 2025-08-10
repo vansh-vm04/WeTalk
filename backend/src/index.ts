@@ -1,6 +1,16 @@
+import express from 'express'
+import http from 'http'
 import { WebSocketServer, WebSocket } from "ws";
 
-const wss = new WebSocketServer({ port: 8080 });
+const app = express();
+const port = process.env.PORT || 8080;
+
+app.get('/',(req,res)=>{
+  res.status(200).send('OK');
+})
+
+const server = http.createServer(app);
+const wss = new WebSocketServer({server});
 
 let onlineUsers: number = 0;
 
@@ -148,3 +158,7 @@ wss.on("connection", (socket: WebSocket) => {
     }
   });
 });
+
+server.listen(port,()=>{
+  console.log('Server connected')
+})
