@@ -73,6 +73,11 @@ wss.on("connection", (socket: WebSocket) => {
       }
       users.push(data);
       allRooms.set(data.roomId, users);
+      users.forEach(u=>{
+        if(u.username != data.username && isOpen(u.socket)){
+          u.socket.send(`${data.username} joined the room`);
+        }
+      })
       onlineUsers++;
       socket.send("Joined room : " + data.roomId);
       console.log(
