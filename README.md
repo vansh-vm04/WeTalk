@@ -7,8 +7,8 @@ WeTalk is a **real-time group chat web app** built using **WebSockets**. Users c
 ## 🪟 Screenshots
 
 <div style='display:flex;'>
-    <img style='height:400px; margin-right:20px;' src="./screenshots/home.png"/>
-    <img style='height:400px;' src="./screenshots/chat.png"/>
+    <img style='height:300px; margin-right:20px;' src="./screenshots/home.png"/>
+    <img style='height:300px;' src="./screenshots/chat.png"/>
 </div>
 
 ---
