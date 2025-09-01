@@ -9,6 +9,10 @@ app.get('/',(req,res)=>{
   res.status(200).send('OK');
 })
 
+app.get('/api/ready', async(req,res)=>{
+    res.sendStatus(200);
+})
+
 const server = http.createServer(app);
 const wss = new WebSocketServer({server});
 
